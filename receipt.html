@@ -1,0 +1,1554 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Receipt | Aakash Earth Festival</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .receipt-page {
+            min-height: 100vh;
+            background: #f8f2e4;
+        }
+
+        .receipt-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .receipt-layout {
+            display: grid;
+            grid-template-columns: 1fr 430px;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .receipt-form-card {
+            padding: 25px;
+            background: #fffdf8;
+            border: 1px solid #dfc98d;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(70,10,15,.08);
+        }
+
+        .receipt-form-card h2 {
+            color: #5b0712;
+            margin-bottom: 20px;
+        }
+
+        .receipt-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .receipt-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .receipt-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .receipt-field label {
+            color: #745521;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .receipt-field input,
+        .receipt-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d8bf83;
+            border-radius: 8px;
+            background: #fffaf0;
+            outline: none;
+        }
+
+        .create-receipt-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+            border: 0;
+            border-radius: 8px;
+            background: linear-gradient(135deg,#6b0713,#40030a);
+            color: #ffe39a;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .receipt-message {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .receipt-preview-wrapper {
+            position: sticky;
+            top: 20px;
+        }
+
+        .preview-label {
+            margin-bottom: 8px;
+            color: #8d6b24;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .receipt-paper {
+            position: relative;
+            overflow: hidden;
+            padding: 27px 23px;
+            border: 2px solid #b98b2e;
+            border-radius: 12px;
+            background: linear-gradient(145deg,#fffdf5,#f7e8c2);
+            box-shadow: 0 15px 40px rgba(63,25,3,.16);
+        }
+
+        .receipt-paper::before {
+            content: "ॐ";
+            position: absolute;
+            right: -10px;
+            bottom: -35px;
+            color: rgba(91,7,18,.05);
+            font-size: 150px;
+            font-weight: bold;
+        }
+
+        .receipt-head {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .ganesh-line {
+            color: #6b0713;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .receipt-head h1 {
+            margin: 10px 0 0;
+            color: #5b0712;
+            font-size: 21px;
+        }
+
+        .receipt-head h2 {
+            margin: 2px 0;
+            color: #a37518;
+            font-size: 13px;
+            letter-spacing: 4px;
+        }
+
+        .receipt-head small {
+            color: #94794b;
+            letter-spacing: 1px;
+        }
+
+        .vargani-label {
+            width: max-content;
+            margin: 17px auto;
+            padding: 6px 15px;
+            border-radius: 20px;
+            background: #5b0712;
+            color: #ffe49a;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .receipt-number-line {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #bda56f;
+            color: #7e6335;
+            font-size: 9px;
+        }
+
+        .receipt-number-line strong {
+            color: #5b0712;
+        }
+
+        .receipt-details {
+            position: relative;
+            z-index: 2;
+            padding: 17px 0;
+            border-bottom: 1px dashed #bda56f;
+        }
+
+        .receipt-row {
+            display: grid;
+            grid-template-columns: 95px 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .receipt-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .receipt-row span {
+            color: #947a51;
+            font-size: 9px;
+        }
+
+        .receipt-row strong {
+            color: #4d3020;
+            font-size: 11px;
+            word-break: break-word;
+        }
+
+        .receipt-row .amount {
+            color: #6b0713;
+            font-size: 19px;
+        }
+
+        .received-box {
+            position: relative;
+            z-index: 2;
+            padding-top: 15px;
+        }
+
+        .received-box > span {
+            color: #947a51;
+            font-size: 8px;
+            letter-spacing: 1px;
+        }
+
+        .received-box strong {
+            display: block;
+            margin-top: 5px;
+            color: #5b0712;
+            font-size: 12px;
+        }
+
+        .received-box small {
+            color: #8f7755;
+            text-transform: uppercase;
+        }
+
+        .receipt-footer {
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+            padding-top: 13px;
+            border-top: 1px solid rgba(157,119,48,.3);
+            text-align: center;
+            color: #5b0712;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .receipt-footer small {
+            display: block;
+            margin-top: 6px;
+            color: #927e61;
+            font-size: 7px;
+            font-weight: normal;
+        }
+
+        .receipt-actions {
+            display: none;
+            grid-template-columns: repeat(3,1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .receipt-actions.show {
+            display: grid;
+        }
+
+        .receipt-actions button {
+            padding: 10px 5px;
+            border: 1px solid #b98b2e;
+            border-radius: 7px;
+            background: #fff9e8;
+            color: #5b0712;
+            cursor: pointer;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            padding: 9px 13px;
+            border: 1px solid #d7b95e;
+            border-radius: 7px;
+            background: transparent;
+            color: #ffe7a0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @media(max-width:900px) {
+            .receipt-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .receipt-preview-wrapper {
+                position: static;
+                max-width: 500px;
+                width: 100%;
+                margin: auto;
+            }
+        }
+
+        @media(max-width:600px) {
+            .receipt-container {
+                padding: 14px;
+            }
+
+            .receipt-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .receipt-field.full {
+                grid-column: auto;
+            }
+
+            .receipt-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #receiptPaper,
+            #receiptPaper * {
+                visibility: visible;
+            }
+
+            #receiptPaper {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                max-width: 430px;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+
+<body class="receipt-page">
+
+<header class="topbar">
+
+    <div>
+        <h1>AAKASH EARTH FESTIVAL</h1>
+        <p>VARGANI RECEIPT</p>
+    </div>
+
+    <button
+        class="back-btn"
+        onclick="goBack()"
+    >
+        ← DASHBOARD
+    </button>
+
+</header>
+
+
+<div class="receipt-container">
+
+    <div class="receipt-layout">
+
+
+        <!-- FORM -->
+
+        <section class="receipt-form-card">
+
+            <p class="mini-title">
+                NEW VARGANI RECEIPT
+            </p>
+
+            <h2>
+                Create Receipt
+            </h2>
+
+            <form id="receiptForm">
+
+                <div class="receipt-grid">
+
+                    <div class="receipt-field full">
+
+                        <label>
+                            Donor / Vargani Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="donorName"
+                            placeholder="Enter full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="receipt-field">
+
+                        <label>
+                            Mobile Number *
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="donorMobile"
+                            maxlength="10"
+                            inputmode="numeric"
+                            placeholder="10 digit mobile"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="receipt-field">
+
+                        <label>
+                            Amount *
+                        </label>
+
+                        <input
+                            type="number"
+                            id="amount"
+                            min="1"
+                            placeholder="₹ Amount"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="receipt-field">
+
+                        <label>
+                            Payment Mode *
+                        </label>
+
+                        <select
+                            id="paymentMode"
+                            required
+                        >
+
+                            <option value="Cash">
+                                Cash
+                            </option>
+
+                            <option value="UPI">
+                                UPI
+                            </option>
+
+                            <option value="Bank Transfer">
+                                Bank Transfer
+                            </option>
+
+                            <option value="Cheque">
+                                Cheque
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="receipt-field">
+
+                        <label>
+                            Receipt Date *
+                        </label>
+
+                        <input
+                            type="date"
+                            id="receiptDate"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="create-receipt-btn"
+                    id="createReceiptButton"
+                >
+                    CREATE RECEIPT
+                </button>
+
+
+                <div
+                    id="receiptMessage"
+                    class="receipt-message"
+                ></div>
+
+            </form>
+
+        </section>
+
+
+        <!-- PREVIEW -->
+
+        <section class="receipt-preview-wrapper">
+
+            <p class="preview-label">
+                RECEIPT PREVIEW
+            </p>
+
+
+            <div
+                class="receipt-paper"
+                id="receiptPaper"
+            >
+
+                <div class="receipt-head">
+
+                    <div class="ganesh-line">
+                        || श्री गणेशाय नमः ||
+                    </div>
+
+                    <h1>
+                        AAKASH EARTH
+                    </h1>
+
+                    <h2>
+                        FESTIVAL
+                    </h2>
+
+                    <small>
+                        GANPATI YUWA MANDAL
+                    </small>
+
+
+                    <div class="vargani-label">
+                        VARGANI RECEIPT
+                    </div>
+
+                </div>
+
+
+                <div class="receipt-number-line">
+
+                    <span>
+                        Receipt No:
+                        <strong id="previewReceiptNo">
+                            AEF-2026-....
+                        </strong>
+                    </span>
+
+                    <span id="previewDate">
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="receipt-details">
+
+                    <div class="receipt-row">
+                        <span>Name</span>
+                        <strong id="previewName">-</strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Mobile</span>
+                        <strong id="previewMobile">-</strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Amount</span>
+
+                        <strong
+                            id="previewAmount"
+                            class="amount"
+                        >
+                            ₹0
+                        </strong>
+                    </div>
+
+                    <div class="receipt-row">
+                        <span>Payment</span>
+                        <strong id="previewPayment">
+                            Cash
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="received-box">
+
+                    <span>
+                        RECEIVED BY
+                    </span>
+
+                    <strong id="previewReceivedBy">
+                        -
+                    </strong>
+
+                    <small id="previewRole">
+                        -
+                    </small>
+
+                </div>
+
+
+                <div class="receipt-footer">
+
+                    🙏 गणपति बप्पा मोरया 🙏
+
+                    <small>
+                        Thank you for your valuable contribution
+                        to Aakash Earth Festival.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="receipt-actions"
+                id="receiptActions"
+            >
+
+                <button onclick="printReceipt()">
+                    🖨 PRINT
+                </button>
+
+                <button onclick="shareReceipt()">
+                    📤 SHARE
+                </button>
+
+                <button onclick="whatsappReceipt()">
+                    💬 WHATSAPP
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<script type="module">
+
+import {
+    db
+}
+from "./firebase.js";
+
+
+import {
+    collection,
+    doc,
+    runTransaction,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+/* =============================================
+   LOGIN CHECK
+============================================= */
+
+const currentUser =
+    JSON.parse(
+        localStorage.getItem(
+            "currentUser"
+        )
+    );
+
+
+if (
+    !currentUser
+    ||
+    (
+        currentUser.role !== "member"
+        &&
+        currentUser.role !== "volunteer"
+    )
+) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =============================================
+   ELEMENTS
+============================================= */
+
+const donorName =
+    document.getElementById(
+        "donorName"
+    );
+
+const donorMobile =
+    document.getElementById(
+        "donorMobile"
+    );
+
+const amount =
+    document.getElementById(
+        "amount"
+    );
+
+const paymentMode =
+    document.getElementById(
+        "paymentMode"
+    );
+
+const receiptDate =
+    document.getElementById(
+        "receiptDate"
+    );
+
+const receiptForm =
+    document.getElementById(
+        "receiptForm"
+    );
+
+const receiptMessage =
+    document.getElementById(
+        "receiptMessage"
+    );
+
+const createButton =
+    document.getElementById(
+        "createReceiptButton"
+    );
+
+
+let createdReceipt =
+    null;
+
+
+/* =============================================
+   CURRENT USER
+============================================= */
+
+document
+    .getElementById(
+        "previewReceivedBy"
+    )
+    .innerText =
+    currentUser.name;
+
+
+document
+    .getElementById(
+        "previewRole"
+    )
+    .innerText =
+    currentUser.role.toUpperCase();
+
+
+/* =============================================
+   TODAY DATE
+============================================= */
+
+const now =
+    new Date();
+
+
+const todayValue =
+    now.getFullYear()
+    +
+    "-"
+    +
+    String(
+        now.getMonth() + 1
+    ).padStart(2, "0")
+    +
+    "-"
+    +
+    String(
+        now.getDate()
+    ).padStart(2, "0");
+
+
+receiptDate.value =
+    todayValue;
+
+
+/* =============================================
+   LIVE PREVIEW
+============================================= */
+
+function updatePreview() {
+
+    document
+        .getElementById(
+            "previewName"
+        )
+        .innerText =
+        donorName.value.trim()
+        ||
+        "-";
+
+
+    document
+        .getElementById(
+            "previewMobile"
+        )
+        .innerText =
+        donorMobile.value.trim()
+        ||
+        "-";
+
+
+    document
+        .getElementById(
+            "previewAmount"
+        )
+        .innerText =
+        "₹"
+        +
+        (
+            Number(
+                amount.value
+            )
+            ||
+            0
+        ).toLocaleString(
+            "en-IN"
+        );
+
+
+    document
+        .getElementById(
+            "previewPayment"
+        )
+        .innerText =
+        paymentMode.value;
+
+
+    document
+        .getElementById(
+            "previewDate"
+        )
+        .innerText =
+        formatDate(
+            receiptDate.value
+        );
+
+}
+
+
+[
+    donorName,
+    donorMobile,
+    amount
+]
+.forEach(
+    input => {
+
+        input.addEventListener(
+            "input",
+            updatePreview
+        );
+
+    }
+);
+
+
+paymentMode.addEventListener(
+    "change",
+    updatePreview
+);
+
+
+receiptDate.addEventListener(
+    "change",
+    updatePreview
+);
+
+
+updatePreview();
+
+
+/* =============================================
+   CREATE RECEIPT
+============================================= */
+
+receiptForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const name =
+            donorName.value.trim();
+
+
+        const mobile =
+            donorMobile.value.trim();
+
+
+        const receiptAmount =
+            Number(
+                amount.value
+            );
+
+
+        const payment =
+            paymentMode.value;
+
+
+        const date =
+            receiptDate.value;
+
+
+        if (
+            name.length < 2
+        ) {
+
+            showMessage(
+                "Please enter donor name.",
+                false
+            );
+
+            return;
+        }
+
+
+        if (
+            !/^[0-9]{10}$/.test(
+                mobile
+            )
+        ) {
+
+            showMessage(
+                "Enter valid 10 digit mobile number.",
+                false
+            );
+
+            return;
+        }
+
+
+        if (
+            !receiptAmount
+            ||
+            receiptAmount <= 0
+        ) {
+
+            showMessage(
+                "Enter valid amount.",
+                false
+            );
+
+            return;
+        }
+
+
+        createButton.disabled =
+            true;
+
+
+        createButton.innerText =
+            "CREATING RECEIPT...";
+
+
+        try {
+
+            /*
+                Counter document:
+
+                system / receiptCounter
+
+                Transaction prevents two devices
+                from receiving the same serial.
+            */
+
+            const counterRef =
+                doc(
+                    db,
+                    "system",
+                    "receiptCounter"
+                );
+
+
+            const result =
+                await runTransaction(
+                    db,
+                    async transaction => {
+
+
+                        const counterSnapshot =
+                            await transaction.get(
+                                counterRef
+                            );
+
+
+                        let nextSerial =
+                            1;
+
+
+                        if (
+                            counterSnapshot.exists()
+                        ) {
+
+                            nextSerial =
+                                (
+                                    Number(
+                                        counterSnapshot
+                                            .data()
+                                            .lastNumber
+                                    )
+                                    ||
+                                    0
+                                )
+                                +
+                                1;
+
+                        }
+
+
+                        const receiptNo =
+                            "AEF-2026-"
+                            +
+                            String(
+                                nextSerial
+                            ).padStart(
+                                4,
+                                "0"
+                            );
+
+
+                        const newReceiptRef =
+                            doc(
+                                collection(
+                                    db,
+                                    "receipts"
+                                )
+                            );
+
+
+                        const receiptData = {
+
+                            serialNumber:
+                                nextSerial,
+
+                            receiptNo:
+                                receiptNo,
+
+                            donorName:
+                                name,
+
+                            donorMobile:
+                                mobile,
+
+                            amount:
+                                receiptAmount,
+
+                            paymentMode:
+                                payment,
+
+                            receiptDate:
+                                date,
+
+                            createdBy:
+                                currentUser.id,
+
+                            createdByName:
+                                currentUser.name,
+
+                            createdByUsername:
+                                currentUser.username,
+
+                            createdByRole:
+                                currentUser.role,
+
+                            createdAt:
+                                serverTimestamp()
+
+                        };
+
+
+                        transaction.set(
+                            counterRef,
+                            {
+                                lastNumber:
+                                    nextSerial,
+
+                                updatedAt:
+                                    serverTimestamp()
+                            },
+                            {
+                                merge:
+                                    true
+                            }
+                        );
+
+
+                        transaction.set(
+                            newReceiptRef,
+                            receiptData
+                        );
+
+
+                        return {
+
+                            id:
+                                newReceiptRef.id,
+
+                            ...receiptData,
+
+                            createdAt:
+                                new Date()
+                                    .toISOString()
+
+                        };
+
+                    }
+                );
+
+
+            createdReceipt =
+                result;
+
+
+            document
+                .getElementById(
+                    "previewReceiptNo"
+                )
+                .innerText =
+                createdReceipt.receiptNo;
+
+
+            document
+                .getElementById(
+                    "receiptActions"
+                )
+                .classList.add(
+                    "show"
+                );
+
+
+            showMessage(
+                "Receipt "
+                +
+                createdReceipt.receiptNo
+                +
+                " created successfully ✓",
+                true
+            );
+
+
+            /*
+                Lock fields after creation so
+                displayed receipt stays identical
+                to saved Firebase data.
+            */
+
+            donorName.disabled =
+                true;
+
+            donorMobile.disabled =
+                true;
+
+            amount.disabled =
+                true;
+
+            paymentMode.disabled =
+                true;
+
+            receiptDate.disabled =
+                true;
+
+            createButton.style.display =
+                "none";
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Receipt Create Error:",
+                error
+            );
+
+
+            showMessage(
+                "Unable to create receipt. Check Firebase / Firestore setup.",
+                false
+            );
+
+
+            createButton.disabled =
+                false;
+
+
+            createButton.innerText =
+                "CREATE RECEIPT";
+
+        }
+
+    }
+);
+
+
+/* =============================================
+   MESSAGE
+============================================= */
+
+function showMessage(
+    message,
+    success
+) {
+
+    receiptMessage.innerText =
+        message;
+
+
+    receiptMessage.style.color =
+        success
+        ?
+        "#287a45"
+        :
+        "#a11925";
+
+}
+
+
+/* =============================================
+   PRINT
+============================================= */
+
+window.printReceipt =
+function() {
+
+    if (!createdReceipt) {
+
+        alert(
+            "Create receipt first."
+        );
+
+        return;
+    }
+
+
+    window.print();
+
+};
+
+
+/* =============================================
+   SHARE
+============================================= */
+
+window.shareReceipt =
+async function() {
+
+    if (!createdReceipt) {
+
+        alert(
+            "Create receipt first."
+        );
+
+        return;
+    }
+
+
+    const text =
+        buildReceiptText();
+
+
+    if (
+        navigator.share
+    ) {
+
+        try {
+
+            await navigator.share({
+                title:
+                    "Aakash Earth Festival Receipt",
+
+                text:
+                    text
+            });
+
+        }
+
+        catch (error) {
+
+            if (
+                error.name !==
+                "AbortError"
+            ) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+
+        alert(
+            "Receipt details copied. You can paste and share them."
+        );
+
+    }
+
+    catch (error) {
+
+        alert(
+            text
+        );
+
+    }
+
+};
+
+
+/* =============================================
+   WHATSAPP
+============================================= */
+
+window.whatsappReceipt =
+function() {
+
+    if (!createdReceipt) {
+
+        alert(
+            "Create receipt first."
+        );
+
+        return;
+    }
+
+
+    const text =
+        buildReceiptText();
+
+
+    const mobile =
+        createdReceipt.donorMobile;
+
+
+    /*
+        Indian number:
+        +91 + 10 digit donor number
+    */
+
+    const whatsappNumber =
+        "91" + mobile;
+
+
+    const url =
+        "https://wa.me/"
+        +
+        whatsappNumber
+        +
+        "?text="
+        +
+        encodeURIComponent(
+            text
+        );
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+};
+
+
+/* =============================================
+   RECEIPT TEXT
+============================================= */
+
+function buildReceiptText() {
+
+    return (
+
+        "🙏 AAKASH EARTH FESTIVAL 🙏\n"
+        +
+        "Ganpati Yuwa Mandal\n\n"
+
+        +
+        "VARGANI RECEIPT\n"
+
+        +
+        "Receipt No: "
+        +
+        createdReceipt.receiptNo
+        +
+        "\n"
+
+        +
+        "Name: "
+        +
+        createdReceipt.donorName
+        +
+        "\n"
+
+        +
+        "Mobile: "
+        +
+        createdReceipt.donorMobile
+        +
+        "\n"
+
+        +
+        "Amount: ₹"
+        +
+        Number(
+            createdReceipt.amount
+        ).toLocaleString(
+            "en-IN"
+        )
+        +
+        "\n"
+
+        +
+        "Payment: "
+        +
+        createdReceipt.paymentMode
+        +
+        "\n"
+
+        +
+        "Date: "
+        +
+        formatDate(
+            createdReceipt.receiptDate
+        )
+        +
+        "\n\n"
+
+        +
+        "Received By: "
+        +
+        createdReceipt.createdByName
+        +
+        " ("
+        +
+        createdReceipt.createdByRole
+            .toUpperCase()
+        +
+        ")\n\n"
+
+        +
+        "🙏 गणपति बप्पा मोरया 🙏"
+
+    );
+
+}
+
+
+/* =============================================
+   FORMAT DATE
+============================================= */
+
+function formatDate(
+    date
+) {
+
+    if (!date) {
+
+        return "-";
+    }
+
+
+    const parts =
+        String(
+            date
+        ).split("-");
+
+
+    if (
+        parts.length !==
+        3
+    ) {
+
+        return date;
+    }
+
+
+    return (
+        parts[2]
+        +
+        "/"
+        +
+        parts[1]
+        +
+        "/"
+        +
+        parts[0]
+    );
+
+}
+
+
+/* =============================================
+   BACK
+============================================= */
+
+window.goBack =
+function() {
+
+    if (
+        currentUser.role ===
+        "volunteer"
+    ) {
+
+        window.location.href =
+            "volunteer.html";
+
+    } else {
+
+        window.location.href =
+            "member.html";
+
+    }
+
+};
+
+</script>
+
+</body>
+</html>

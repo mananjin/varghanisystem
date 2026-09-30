@@ -1,0 +1,1720 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Member Dashboard | Aakash Earth Festival</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        .member-page {
+            min-height: 100vh;
+            background: #f8f2e4;
+        }
+
+        .member-container {
+            width: 100%;
+            max-width: 1250px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .member-profile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+
+            padding: 22px;
+
+            border: 1px solid #dfc98d;
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fffdf5,
+                    #f8e8bd
+                );
+
+            box-shadow:
+                0 12px 30px
+                rgba(70, 10, 15, 0.08);
+        }
+
+        .member-profile h2 {
+            margin: 5px 0;
+            color: #5b0712;
+        }
+
+        .member-profile p {
+            margin: 3px 0;
+            color: #8b7147;
+            font-size: 12px;
+        }
+
+        .role-badge {
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            background: #5b0712;
+
+            color: #ffe39a;
+
+            font-size: 10px;
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+        .member-stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-top: 20px;
+        }
+
+        .member-stat {
+            padding: 20px;
+
+            border:
+                1px solid
+                #e0cca0;
+
+            border-radius: 12px;
+
+            background: #fffdf8;
+
+            box-shadow:
+                0 8px 22px
+                rgba(50, 10, 10, 0.06);
+        }
+
+        .member-stat span {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #91754b;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+        }
+
+        .member-stat strong {
+            color: #5b0712;
+
+            font-size: 22px;
+        }
+
+        .quick-card {
+            margin-top: 20px;
+
+            padding: 25px;
+
+            border:
+                1px solid
+                #dfc98d;
+
+            border-radius: 14px;
+
+            background: #fffdf8;
+        }
+
+        .quick-card h3 {
+            margin-bottom: 18px;
+            color: #5b0712;
+        }
+
+        .quick-actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+        }
+
+        .quick-action {
+            min-height: 90px;
+
+            padding: 15px;
+
+            border:
+                1px solid
+                #d5b968;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff9e8,
+                    #f6e5b6
+                );
+
+            color: #5b0712;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .quick-action:hover {
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(78, 17, 20, 0.12);
+        }
+
+        .quick-action span {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 23px;
+        }
+
+        .receipt-section {
+            margin-top: 20px;
+
+            padding: 25px;
+
+            border:
+                1px solid
+                #dfc98d;
+
+            border-radius: 14px;
+
+            background: #fffdf8;
+        }
+
+        .receipt-section-head {
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+        .receipt-section h3 {
+            color: #5b0712;
+        }
+
+        .receipt-search {
+            width: 100%;
+            max-width: 300px;
+
+            padding: 11px;
+
+            border:
+                1px solid
+                #d5bd82;
+
+            border-radius: 8px;
+
+            outline: none;
+        }
+
+        .receipt-table-wrap {
+            overflow-x: auto;
+        }
+
+        .receipt-table {
+            width: 100%;
+
+            min-width: 850px;
+
+            border-collapse:
+                collapse;
+        }
+
+        .receipt-table th,
+        .receipt-table td {
+            padding: 12px;
+
+            border-bottom:
+                1px solid
+                #eadbb7;
+
+            text-align: left;
+
+            font-size: 11px;
+        }
+
+        .receipt-table th {
+            background: #fff6df;
+
+            color: #6b0713;
+        }
+
+        .receipt-number {
+            color: #6b0713;
+
+            font-weight: bold;
+        }
+
+        .amount-value {
+            color: #287a45;
+
+            font-weight: bold;
+        }
+
+        .filter-title {
+            margin-bottom: 12px;
+
+            color: #94762d;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+        .festival-message {
+            margin-top: 20px;
+
+            padding: 25px;
+
+            border:
+                1px solid
+                #d6b85e;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5b0712,
+                    #35030a
+                );
+
+            text-align: center;
+
+            color: #ffe7a0;
+        }
+
+        .festival-message h3 {
+            margin-bottom: 7px;
+        }
+
+        .logout-member {
+            padding: 9px 14px;
+
+            border:
+                1px solid
+                #d7b95e;
+
+            border-radius: 7px;
+
+            background: transparent;
+
+            color: #ffe7a0;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        .empty-receipts {
+            padding: 30px;
+
+            text-align: center;
+
+            color: #957c58;
+        }
+
+        @media(max-width: 900px) {
+
+            .member-stats,
+            .quick-actions {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width: 600px) {
+
+            .member-container {
+                padding: 14px;
+            }
+
+            .member-profile {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .member-stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .receipt-section-head {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .receipt-search {
+                max-width: none;
+            }
+
+        }
+
+        @media(max-width: 390px) {
+
+            .member-stats,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="member-page">
+
+
+<!-- ==========================================
+     TOP BAR
+=========================================== -->
+
+<header class="topbar">
+
+    <div>
+
+        <h1>
+            AAKASH EARTH FESTIVAL
+        </h1>
+
+        <p>
+            MEMBER DASHBOARD
+        </p>
+
+    </div>
+
+
+    <button
+        class="logout-member"
+        onclick="logout()"
+    >
+        LOGOUT
+    </button>
+
+</header>
+
+
+
+<div class="member-container">
+
+
+    <!-- ==========================================
+         MEMBER PROFILE
+    =========================================== -->
+
+    <section class="member-profile">
+
+        <div>
+
+            <span class="role-badge">
+                MEMBER
+            </span>
+
+            <h2 id="memberName">
+                Welcome
+            </h2>
+
+            <p>
+                Username:
+                <strong id="memberUsername">
+                    -
+                </strong>
+            </p>
+
+            <p>
+                Mobile:
+                <strong id="memberMobile">
+                    -
+                </strong>
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <p>
+                || श्री गणेशाय नमः ||
+            </p>
+
+            <strong
+                style="
+                    color:#6b0713;
+                    font-size:14px;
+                "
+            >
+                गणपति बप्पा मोरया
+            </strong>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================
+         STATS
+    =========================================== -->
+
+    <section class="member-stats">
+
+
+        <div class="member-stat">
+
+            <span>
+                Total Collection
+            </span>
+
+            <strong id="totalCollection">
+                ₹0
+            </strong>
+
+        </div>
+
+
+
+        <div class="member-stat">
+
+            <span>
+                Total Receipts
+            </span>
+
+            <strong id="totalReceipts">
+                0
+            </strong>
+
+        </div>
+
+
+
+        <div class="member-stat">
+
+            <span>
+                My Collection
+            </span>
+
+            <strong id="myCollection">
+                ₹0
+            </strong>
+
+        </div>
+
+
+
+        <div class="member-stat">
+
+            <span>
+                My Receipts
+            </span>
+
+            <strong id="myReceipts">
+                0
+            </strong>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         QUICK ACTIONS
+    =========================================== -->
+
+    <section class="quick-card">
+
+        <h3>
+            Quick Actions
+        </h3>
+
+
+        <div class="quick-actions">
+
+
+            <button
+                class="quick-action"
+                onclick="createReceipt()"
+            >
+
+                <span>
+                    🧾
+                </span>
+
+                Create Receipt
+
+            </button>
+
+
+
+            <button
+                class="quick-action"
+                onclick="showAllReceipts()"
+            >
+
+                <span>
+                    📋
+                </span>
+
+                All Receipts
+
+            </button>
+
+
+
+            <button
+                class="quick-action"
+                onclick="showMyReceipts()"
+            >
+
+                <span>
+                    👤
+                </span>
+
+                My Receipts
+
+            </button>
+
+
+
+            <button
+                class="quick-action"
+                onclick="showCollection()"
+            >
+
+                <span>
+                    ₹
+                </span>
+
+                Collection
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================
+         RECEIPTS
+    =========================================== -->
+
+    <section
+        class="receipt-section"
+        id="receiptSection"
+    >
+
+
+        <div class="receipt-section-head">
+
+            <div>
+
+                <p
+                    class="filter-title"
+                    id="receiptFilterTitle"
+                >
+                    ALL RECEIPTS
+                </p>
+
+                <h3>
+                    Vargani Receipts
+                </h3>
+
+            </div>
+
+
+            <input
+                type="text"
+                id="receiptSearch"
+                class="receipt-search"
+                placeholder="Search receipt, name or mobile..."
+            >
+
+        </div>
+
+
+
+        <div class="receipt-table-wrap">
+
+            <table class="receipt-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Receipt No.
+                        </th>
+
+                        <th>
+                            Donor
+                        </th>
+
+                        <th>
+                            Mobile
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Payment
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Received By
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="receiptTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty-receipts"
+                        >
+                            Loading receipts...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==========================================
+         FESTIVAL MESSAGE
+    =========================================== -->
+
+    <section class="festival-message">
+
+        <h3>
+            🙏 गणपति बप्पा मोरया 🙏
+        </h3>
+
+        <p>
+            Aakash Earth Festival • Ganpati Yuwa Mandal
+        </p>
+
+    </section>
+
+
+</div>
+
+
+
+<script type="module">
+
+
+/* ==========================================
+   FIREBASE
+=========================================== */
+
+import {
+    db
+}
+from "./firebase.js";
+
+
+import {
+    collection,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+
+/* ==========================================
+   LOGIN CHECK
+=========================================== */
+
+const currentUser =
+    JSON.parse(
+        localStorage.getItem(
+            "currentUser"
+        )
+    );
+
+
+if (
+    !currentUser
+    ||
+    currentUser.role !==
+    "member"
+) {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* ==========================================
+   DATA
+=========================================== */
+
+let receipts =
+    [];
+
+
+let receiptMode =
+    "all";
+
+
+
+/* ==========================================
+   MEMBER DETAILS
+=========================================== */
+
+document
+    .getElementById(
+        "memberName"
+    )
+    .innerText =
+    "Welcome, " +
+    currentUser.name;
+
+
+document
+    .getElementById(
+        "memberUsername"
+    )
+    .innerText =
+    currentUser.username;
+
+
+document
+    .getElementById(
+        "memberMobile"
+    )
+    .innerText =
+    currentUser.mobile || "-";
+
+
+
+/* ==========================================
+   LOAD FIREBASE RECEIPTS
+=========================================== */
+
+async function loadReceipts() {
+
+
+    try {
+
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "receipts"
+                )
+            );
+
+
+        receipts =
+            [];
+
+
+        snapshot.forEach(
+            item => {
+
+
+                receipts.push({
+
+                    id:
+                        item.id,
+
+                    ...item.data()
+
+                });
+
+            }
+        );
+
+
+        /*
+            Newest receipt first.
+            serialNumber is generated by
+            receipt.html.
+        */
+
+        receipts.sort(
+            (a, b) =>
+
+                Number(
+                    b.serialNumber
+                )
+                -
+                Number(
+                    a.serialNumber
+                )
+        );
+
+
+        updateStatistics();
+
+        displayReceipts();
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "Receipt Load Error:",
+            error
+        );
+
+
+        document
+            .getElementById(
+                "receiptTableBody"
+            )
+            .innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty-receipts"
+                    >
+
+                        Unable to load receipts
+                        from Firebase.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+    }
+
+}
+
+
+
+/* ==========================================
+   STATISTICS
+=========================================== */
+
+function updateStatistics() {
+
+
+    const total =
+        receipts.reduce(
+            (
+                sum,
+                receipt
+            ) =>
+
+                sum +
+                (
+                    Number(
+                        receipt.amount
+                    )
+                    ||
+                    0
+                ),
+
+            0
+        );
+
+
+
+    const mine =
+        receipts.filter(
+            receipt =>
+
+                String(
+                    receipt.createdBy
+                )
+                ===
+                String(
+                    currentUser.id
+                )
+        );
+
+
+
+    const myTotal =
+        mine.reduce(
+            (
+                sum,
+                receipt
+            ) =>
+
+                sum +
+                (
+                    Number(
+                        receipt.amount
+                    )
+                    ||
+                    0
+                ),
+
+            0
+        );
+
+
+
+    document
+        .getElementById(
+            "totalCollection"
+        )
+        .innerText =
+
+        "₹" +
+        formatMoney(
+            total
+        );
+
+
+
+    document
+        .getElementById(
+            "totalReceipts"
+        )
+        .innerText =
+        receipts.length;
+
+
+
+    document
+        .getElementById(
+            "myCollection"
+        )
+        .innerText =
+
+        "₹" +
+        formatMoney(
+            myTotal
+        );
+
+
+
+    document
+        .getElementById(
+            "myReceipts"
+        )
+        .innerText =
+        mine.length;
+
+}
+
+
+
+/* ==========================================
+   DISPLAY RECEIPTS
+=========================================== */
+
+function displayReceipts() {
+
+
+    const table =
+        document.getElementById(
+            "receiptTableBody"
+        );
+
+
+    const search =
+        document
+            .getElementById(
+                "receiptSearch"
+            )
+            .value
+            .trim()
+            .toLowerCase();
+
+
+
+    let list =
+        [...receipts];
+
+
+
+    /* MY RECEIPTS FILTER */
+
+    if (
+        receiptMode ===
+        "mine"
+    ) {
+
+
+        list =
+            list.filter(
+                receipt =>
+
+                    String(
+                        receipt.createdBy
+                    )
+                    ===
+                    String(
+                        currentUser.id
+                    )
+            );
+
+    }
+
+
+
+    /* SEARCH */
+
+    list =
+        list.filter(
+            receipt => {
+
+
+                const receiptNo =
+                    String(
+                        receipt.receiptNo
+                        ||
+                        ""
+                    )
+                    .toLowerCase();
+
+
+                const donor =
+                    String(
+                        receipt.donorName
+                        ||
+                        ""
+                    )
+                    .toLowerCase();
+
+
+                const mobile =
+                    String(
+                        receipt.donorMobile
+                        ||
+                        ""
+                    );
+
+
+                return (
+
+                    receiptNo.includes(
+                        search
+                    )
+
+                    ||
+
+                    donor.includes(
+                        search
+                    )
+
+                    ||
+
+                    mobile.includes(
+                        search
+                    )
+
+                );
+
+            }
+        );
+
+
+
+    table.innerHTML =
+        "";
+
+
+
+    if (
+        list.length === 0
+    ) {
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="empty-receipts"
+                >
+
+                    No receipts found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    list.forEach(
+        receipt => {
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td
+                    class="receipt-number"
+                >
+
+                    ${escapeHTML(
+                        receipt.receiptNo
+                        ||
+                        "-"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        receipt.donorName
+                        ||
+                        "-"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        receipt.donorMobile
+                        ||
+                        "-"
+                    )}
+
+                </td>
+
+
+                <td
+                    class="amount-value"
+                >
+
+                    ₹${formatMoney(
+                        receipt.amount
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        receipt.paymentMode
+                        ||
+                        "-"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${formatDate(
+                        receipt.receiptDate
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        receipt.createdByName
+                        ||
+                        "-"
+                    )}
+
+                    <br>
+
+                    <small>
+
+                        ${escapeHTML(
+                            receipt.createdByRole
+                            ||
+                            ""
+                        )}
+
+                    </small>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+
+/* ==========================================
+   SEARCH
+=========================================== */
+
+document
+    .getElementById(
+        "receiptSearch"
+    )
+    .addEventListener(
+        "input",
+        displayReceipts
+    );
+
+
+
+/* ==========================================
+   CREATE RECEIPT
+=========================================== */
+
+window.createReceipt =
+function() {
+
+
+    window.location.href =
+        "receipt.html";
+
+};
+
+
+
+/* ==========================================
+   ALL RECEIPTS
+=========================================== */
+
+window.showAllReceipts =
+function() {
+
+
+    receiptMode =
+        "all";
+
+
+    document
+        .getElementById(
+            "receiptFilterTitle"
+        )
+        .innerText =
+        "ALL RECEIPTS";
+
+
+    document
+        .getElementById(
+            "receiptSearch"
+        )
+        .value =
+        "";
+
+
+    displayReceipts();
+
+
+    scrollToReceipts();
+
+};
+
+
+
+/* ==========================================
+   MY RECEIPTS
+=========================================== */
+
+window.showMyReceipts =
+function() {
+
+
+    receiptMode =
+        "mine";
+
+
+    document
+        .getElementById(
+            "receiptFilterTitle"
+        )
+        .innerText =
+        "MY RECEIPTS";
+
+
+    document
+        .getElementById(
+            "receiptSearch"
+        )
+        .value =
+        "";
+
+
+    displayReceipts();
+
+
+    scrollToReceipts();
+
+};
+
+
+
+/* ==========================================
+   COLLECTION
+=========================================== */
+
+window.showCollection =
+function() {
+
+
+    const total =
+        receipts.reduce(
+            (
+                sum,
+                receipt
+            ) =>
+
+                sum +
+                (
+                    Number(
+                        receipt.amount
+                    )
+                    ||
+                    0
+                ),
+
+            0
+        );
+
+
+    const mine =
+        receipts.filter(
+            receipt =>
+
+                String(
+                    receipt.createdBy
+                )
+                ===
+                String(
+                    currentUser.id
+                )
+        );
+
+
+    const myTotal =
+        mine.reduce(
+            (
+                sum,
+                receipt
+            ) =>
+
+                sum +
+                (
+                    Number(
+                        receipt.amount
+                    )
+                    ||
+                    0
+                ),
+
+            0
+        );
+
+
+    alert(
+
+        "AAKASH EARTH FESTIVAL\n\n"
+
+        +
+
+        "Total Collection: ₹"
+        +
+        formatMoney(
+            total
+        )
+
+        +
+
+        "\nTotal Receipts: "
+        +
+        receipts.length
+
+        +
+
+        "\n\nMy Collection: ₹"
+        +
+        formatMoney(
+            myTotal
+        )
+
+        +
+
+        "\nMy Receipts: "
+        +
+        mine.length
+
+    );
+
+};
+
+
+
+/* ==========================================
+   SCROLL
+=========================================== */
+
+function scrollToReceipts() {
+
+
+    document
+        .getElementById(
+            "receiptSection"
+        )
+        .scrollIntoView({
+
+            behavior:
+                "smooth",
+
+            block:
+                "start"
+
+        });
+
+}
+
+
+
+/* ==========================================
+   MONEY FORMAT
+=========================================== */
+
+function formatMoney(
+    value
+) {
+
+
+    return (
+        Number(
+            value
+        )
+        ||
+        0
+    )
+    .toLocaleString(
+        "en-IN"
+    );
+
+}
+
+
+
+/* ==========================================
+   DATE FORMAT
+=========================================== */
+
+function formatDate(
+    date
+) {
+
+
+    if (!date) {
+
+        return "-";
+
+    }
+
+
+    const parts =
+        String(
+            date
+        )
+        .split("-");
+
+
+    if (
+        parts.length !==
+        3
+    ) {
+
+        return escapeHTML(
+            date
+        );
+
+    }
+
+
+    return (
+
+        parts[2]
+        +
+        "/"
+        +
+        parts[1]
+        +
+        "/"
+        +
+        parts[0]
+
+    );
+
+}
+
+
+
+/* ==========================================
+   ESCAPE HTML
+=========================================== */
+
+function escapeHTML(
+    value
+) {
+
+
+    return String(
+        value ?? ""
+    )
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+
+/* ==========================================
+   LOGOUT
+=========================================== */
+
+window.logout =
+function() {
+
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+
+    localStorage.removeItem(
+        "adminLogin"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+};
+
+
+
+/* ==========================================
+   START
+=========================================== */
+
+loadReceipts();
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1292 @@
+/* =========================================================
+   AAKASH EARTH FESTIVAL
+   FINAL ROYAL MAROON + GOLD THEME
+========================================================= */
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: #3f251d;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    transition:
+        transform .18s ease,
+        opacity .18s ease,
+        box-shadow .18s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+    --maroon-dark: #310309;
+    --maroon: #5b0712;
+    --maroon-light: #7d1522;
+
+    --gold-dark: #8e6519;
+    --gold: #bd9139;
+    --gold-light: #f0d58b;
+
+    --cream: #fffaf0;
+    --cream-light: #fffdf8;
+    --page: #f7f0df;
+
+    --green: #287a45;
+    --red: #a11b28;
+    --blue: #1c6094;
+
+    --text: #493328;
+    --muted: #8e7859;
+
+    --border: #dfc98d;
+
+    --shadow:
+        0 12px 32px
+        rgba(70, 10, 15, .10);
+}
+
+
+/* =========================================================
+   COMMON
+========================================================= */
+
+a {
+    color: inherit;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 11px 12px;
+
+    border:
+        1px solid
+        #d7bf85;
+
+    border-radius: 8px;
+
+    background: #fffdf8;
+
+    color: var(--text);
+
+    outline: none;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--gold);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(189, 145, 57, .13);
+}
+
+textarea {
+    resize: vertical;
+}
+
+label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #6b4d26;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+.mini-title {
+    margin-bottom: 5px;
+
+    color: var(--gold-dark);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+.primary-btn {
+    margin-top: 18px;
+
+    padding: 12px 20px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--maroon),
+            var(--maroon-dark)
+        );
+
+    color: #ffe5a0;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: .5px;
+}
+
+.primary-btn:hover {
+    box-shadow:
+        0 7px 20px
+        rgba(91, 7, 18, .20);
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+    min-height: 74px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    gap: 20px;
+
+    padding: 14px 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #650b17,
+            #310309
+        );
+
+    border-bottom:
+        3px solid
+        #b98a2e;
+
+    color: #ffe4a0;
+
+    box-shadow:
+        0 6px 18px
+        rgba(40, 0, 5, .20);
+}
+
+.topbar h1 {
+    font-size: 19px;
+
+    letter-spacing: 1.5px;
+}
+
+.topbar p {
+    margin-top: 3px;
+
+    color: #d7ba73;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.logout-btn {
+    padding: 9px 15px;
+
+    border:
+        1px solid
+        #d8ba62;
+
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #ffe5a0;
+
+    cursor: pointer;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   LOGIN PAGE
+========================================================= */
+
+.login-page {
+    min-height: 100vh;
+
+    padding: 35px 18px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #8b1725 0,
+            #5a0712 34%,
+            #2c0208 100%
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.login-main {
+    width: 100%;
+
+    max-width: 970px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(320px, 440px)
+        minmax(300px, 1fr);
+
+    gap: 24px;
+
+    align-items: center;
+}
+
+.login-box,
+.leaderboard-box {
+    border:
+        1px solid
+        rgba(224, 186, 91, .65);
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 250, 235, .98),
+            rgba(247, 228, 181, .98)
+        );
+
+    box-shadow:
+        0 22px 60px
+        rgba(0, 0, 0, .30);
+}
+
+.login-box {
+    padding: 30px;
+}
+
+.crown {
+    text-align: center;
+
+    color: var(--gold-dark);
+
+    font-size: 29px;
+}
+
+.ganesh-title {
+    margin-top: 4px;
+
+    text-align: center;
+
+    color: var(--maroon);
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.login-box h1 {
+    margin-top: 10px;
+
+    text-align: center;
+
+    color: var(--maroon);
+
+    font-size: 26px;
+
+    letter-spacing: 1px;
+}
+
+.login-box h2 {
+    margin-top: -2px;
+
+    text-align: center;
+
+    color: var(--gold-dark);
+
+    font-size: 17px;
+
+    letter-spacing: 6px;
+}
+
+.gold-line {
+    width: 100px;
+    height: 2px;
+
+    margin: 15px auto 10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+}
+
+.subtitle {
+    text-align: center;
+
+    color: #8e7548;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+}
+
+.welcome {
+    margin: 24px 0 18px;
+
+    text-align: center;
+}
+
+.welcome h3 {
+    color: var(--maroon);
+
+    font-size: 18px;
+}
+
+.welcome p {
+    margin-top: 3px;
+
+    color: #947d5b;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+.login-box form label {
+    margin-top: 12px;
+}
+
+.password-box {
+    position: relative;
+}
+
+.password-box input {
+    padding-right: 48px;
+}
+
+.show-password {
+    position: absolute;
+
+    top: 50%;
+    right: 7px;
+
+    transform: translateY(-50%);
+
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.show-password:hover {
+    transform:
+        translateY(-50%);
+}
+
+.login-btn {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 12px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6b0713,
+            #350208
+        );
+
+    color: #ffe6a1;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+#errorMessage {
+    min-height: 18px;
+
+    margin-top: 9px;
+
+    text-align: center;
+
+    color: #a21c28;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.roles {
+    margin-top: 14px;
+
+    text-align: center;
+
+    color: #9b835f;
+
+    font-size: 8px;
+
+    letter-spacing: 1.5px;
+}
+
+.bottom-text {
+    margin-top: 15px;
+
+    text-align: center;
+
+    color: var(--maroon);
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   LOGIN LEADERBOARD
+========================================================= */
+
+.leaderboard-box {
+    padding: 24px;
+}
+
+.leaderboard-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding-bottom: 15px;
+
+    border-bottom:
+        1px solid
+        rgba(151, 111, 35, .25);
+}
+
+.leaderboard-title > span {
+    font-size: 28px;
+}
+
+.leaderboard-title p {
+    color: #9c7c35;
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1.5px;
+}
+
+.leaderboard-title h3 {
+    margin-top: 3px;
+
+    color: var(--maroon);
+
+    font-size: 16px;
+}
+
+.ranking-item {
+    display: grid;
+
+    grid-template-columns:
+        44px 1fr auto;
+
+    gap: 10px;
+
+    align-items: center;
+
+    padding: 13px 4px;
+
+    border-bottom:
+        1px solid
+        rgba(155, 120, 58, .16);
+}
+
+.rank-number {
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+.rank-person strong {
+    display: block;
+
+    color: var(--maroon);
+
+    font-size: 11px;
+}
+
+.rank-person span {
+    color: #9b825e;
+
+    font-size: 8px;
+}
+
+.rank-performance {
+    text-align: right;
+}
+
+.rank-performance strong {
+    display: block;
+
+    color: var(--green);
+
+    font-size: 11px;
+}
+
+.rank-performance span {
+    color: #8d785b;
+
+    font-size: 8px;
+}
+
+.no-ranking {
+    padding: 30px 10px;
+
+    text-align: center;
+
+    color: #8e7859;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ADMIN LAYOUT
+========================================================= */
+
+.admin-layout {
+    min-height:
+        calc(100vh - 74px);
+
+    display: grid;
+
+    grid-template-columns:
+        220px 1fr;
+
+    background: var(--page);
+}
+
+.sidebar {
+    padding: 22px 14px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #4e050f,
+            #300208
+        );
+
+    border-right:
+        2px solid
+        #a77928;
+}
+
+.sidebar button {
+    width: 100%;
+
+    margin-bottom: 7px;
+
+    padding: 11px 12px;
+
+    border:
+        1px solid
+        rgba(217, 183, 91, .25);
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, .03);
+
+    color: #f2d88d;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.sidebar button:hover {
+    background:
+        rgba(255, 223, 139, .10);
+
+    border-color:
+        rgba(217, 183, 91, .6);
+}
+
+.admin-content {
+    min-width: 0;
+
+    padding: 25px;
+}
+
+
+/* =========================================================
+   ADMIN BANNER
+========================================================= */
+
+.royal-banner {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 28px;
+
+    border:
+        1px solid
+        #bd9139;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #650b17,
+            #350208
+        );
+
+    box-shadow: var(--shadow);
+
+    color: #ffe7a0;
+}
+
+.royal-banner::after {
+    content: "ॐ";
+
+    position: absolute;
+
+    right: 25px;
+    top: -25px;
+
+    color:
+        rgba(255, 225, 144, .08);
+
+    font-size: 120px;
+}
+
+.royal-banner p {
+    color: #dcbf70;
+
+    font-size: 10px;
+
+    font-weight: bold;
+}
+
+.royal-banner h2 {
+    margin-top: 7px;
+
+    font-size: 25px;
+}
+
+.royal-banner span {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #c8aa61;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-top: 18px;
+}
+
+.stat-card {
+    padding: 19px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 11px;
+
+    background:
+        var(--cream-light);
+
+    box-shadow:
+        0 8px 20px
+        rgba(72, 24, 13, .05);
+}
+
+.stat-card span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: .5px;
+
+    text-transform: uppercase;
+}
+
+.stat-card strong {
+    color: var(--maroon);
+
+    font-size: 21px;
+}
+
+
+/* =========================================================
+   ADMIN CARDS
+========================================================= */
+
+.admin-card {
+    margin-top: 18px;
+
+    padding: 24px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    background:
+        var(--cream-light);
+
+    box-shadow: var(--shadow);
+}
+
+.admin-card:first-child {
+    margin-top: 0;
+}
+
+.admin-card h2,
+.admin-card h3 {
+    color: var(--maroon);
+}
+
+.admin-card h2 {
+    margin-bottom: 18px;
+
+    font-size: 20px;
+}
+
+.admin-card h3 {
+    font-size: 16px;
+}
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+table {
+    border-spacing: 0;
+}
+
+.admin-table-wrap,
+.receipt-table-wrap {
+    border:
+        1px solid
+        #e5d5ad;
+
+    border-radius: 10px;
+
+    background: white;
+}
+
+.admin-table tbody tr:hover,
+.receipt-table tbody tr:hover {
+    background: #fffaf0;
+}
+
+
+/* =========================================================
+   STATUS / PRIORITY GLOBAL
+========================================================= */
+
+.status-pill,
+.task-chip {
+    white-space: nowrap;
+}
+
+.status-pending {
+    background: #fff1c9 !important;
+    color: #805800 !important;
+}
+
+.status-submitted {
+    background: #dceeff !important;
+    color: #145488 !important;
+}
+
+.status-completed {
+    background: #dff3e5 !important;
+    color: #24643a !important;
+}
+
+.priority-urgent {
+    background: #f8d7da !important;
+    color: #8c1520 !important;
+}
+
+.priority-important {
+    background: #ffe8b2 !important;
+    color: #815900 !important;
+}
+
+
+/* =========================================================
+   MEMBER / VOLUNTEER SHARED
+========================================================= */
+
+.member-page,
+.volunteer-page,
+.receipt-page {
+    background:
+        radial-gradient(
+            circle at top,
+            #fffaf0,
+            #f5ecd8 70%
+        );
+}
+
+.member-profile,
+.volunteer-profile,
+.performance-card,
+.member-stat,
+.quick-card,
+.tasks-panel,
+.receipt-section {
+    transition:
+        transform .2s,
+        box-shadow .2s;
+}
+
+.member-stat:hover,
+.performance-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(70, 10, 15, .10);
+}
+
+
+/* =========================================================
+   TASK CARDS
+========================================================= */
+
+.task-card {
+    transition:
+        transform .2s,
+        box-shadow .2s,
+        border-color .2s;
+}
+
+.task-card:hover {
+    transform:
+        translateY(-2px);
+
+    border-color:
+        #c6a553;
+
+    box-shadow:
+        0 9px 22px
+        rgba(70, 10, 15, .08);
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.task-modal-card,
+.review-card {
+    box-shadow:
+        0 24px 70px
+        rgba(0, 0, 0, .30);
+}
+
+
+/* =========================================================
+   RECEIPT
+========================================================= */
+
+.receipt-paper {
+    color: #402b20;
+}
+
+.receipt-paper strong {
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #eee4cf;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #b38a3a;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #8c661e;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width: 1000px) {
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE ADMIN
+========================================================= */
+
+@media(max-width: 780px) {
+
+    .topbar {
+        min-height: 65px;
+
+        padding:
+            12px 15px;
+    }
+
+    .topbar h1 {
+        font-size: 14px;
+    }
+
+    .topbar p {
+        font-size: 7px;
+    }
+
+    .admin-layout {
+        display: block;
+    }
+
+    .sidebar {
+        display: flex;
+
+        overflow-x: auto;
+
+        gap: 7px;
+
+        padding: 10px;
+
+        border-right: 0;
+
+        border-bottom:
+            2px solid
+            #a77928;
+    }
+
+    .sidebar button {
+        width: auto;
+
+        min-width:
+            max-content;
+
+        margin: 0;
+
+        padding:
+            9px 12px;
+
+        text-align: center;
+    }
+
+    .admin-content {
+        padding: 15px;
+    }
+
+    .royal-banner {
+        padding: 22px 18px;
+    }
+
+    .royal-banner h2 {
+        font-size: 20px;
+    }
+
+    .admin-card {
+        padding: 18px;
+    }
+
+}
+
+
+/* =========================================================
+   LOGIN TABLET / MOBILE
+========================================================= */
+
+@media(max-width: 760px) {
+
+    .login-page {
+        align-items: flex-start;
+
+        padding-top: 20px;
+    }
+
+    .login-main {
+        max-width: 480px;
+
+        grid-template-columns: 1fr;
+    }
+
+    .leaderboard-box {
+        order: 2;
+    }
+
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+@media(max-width: 600px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .login-box,
+    .leaderboard-box {
+        border-radius: 12px;
+    }
+
+    .login-box {
+        padding: 23px 18px;
+    }
+
+    .login-box h1 {
+        font-size: 22px;
+    }
+
+    .login-box h2 {
+        font-size: 14px;
+    }
+
+    .ranking-item {
+        grid-template-columns:
+            38px 1fr auto;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media(max-width: 390px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        gap: 8px;
+    }
+
+    .topbar h1 {
+        font-size: 12px;
+    }
+
+    .logout-btn,
+    .logout-member,
+    .logout-volunteer,
+    .back-btn {
+        padding:
+            7px 8px !important;
+
+        font-size:
+            8px !important;
+    }
+
+    .login-page {
+        padding:
+            12px 10px;
+    }
+
+    .login-box {
+        padding:
+            20px 15px;
+    }
+
+    .leaderboard-box {
+        padding:
+            18px 14px;
+    }
+
+    .ranking-item {
+        grid-template-columns:
+            32px 1fr;
+    }
+
+    .rank-performance {
+        grid-column: 2;
+
+        text-align: left;
+    }
+
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print {
+
+    body {
+        background: white !important;
+    }
+
+    .topbar,
+    .sidebar,
+    button,
+    .receipt-actions {
+        display: none !important;
+    }
+
+}

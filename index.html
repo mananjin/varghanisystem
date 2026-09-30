@@ -1,0 +1,1083 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Aakash Earth Festival</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+
+<body class="login-page">
+
+
+<div class="login-main">
+
+
+    <!-- =====================================
+         LOGIN BOX
+    ====================================== -->
+
+    <div class="login-box">
+
+        <div class="crown">
+            ♛
+        </div>
+
+
+        <p class="ganesh-title">
+            || श्री गणेशाय नमः ||
+        </p>
+
+
+        <h1>
+            AAKASH EARTH
+        </h1>
+
+
+        <h2>
+            FESTIVAL
+        </h2>
+
+
+        <div class="gold-line"></div>
+
+
+        <p class="subtitle">
+            GANPATI YUWA MANDAL
+        </p>
+
+
+
+        <div class="welcome">
+
+            <h3>
+                Welcome Back
+            </h3>
+
+            <p>
+                Admin • Member • Volunteer
+            </p>
+
+        </div>
+
+
+
+        <form id="loginForm">
+
+
+            <label>
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter username"
+                autocomplete="username"
+                required
+            >
+
+
+
+            <label>
+                Password
+            </label>
+
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required
+                >
+
+
+                <button
+                    type="button"
+                    id="showPassword"
+                    class="show-password"
+                >
+                    👁
+                </button>
+
+            </div>
+
+
+
+            <button
+                type="submit"
+                class="login-btn"
+                id="loginButton"
+            >
+                LOGIN
+            </button>
+
+
+            <p id="errorMessage"></p>
+
+        </form>
+
+
+
+        <div class="roles">
+            AUTHORIZED ACCESS ONLY
+        </div>
+
+
+        <div class="bottom-text">
+            🙏 गणपति बप्पा मोरया 🙏
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         VOLUNTEER RANKING
+    ====================================== -->
+
+    <div class="leaderboard-box">
+
+
+        <div class="leaderboard-title">
+
+            <span>
+                🏆
+            </span>
+
+
+            <div>
+
+                <p>
+                    AAKASH EARTH FESTIVAL
+                </p>
+
+                <h3>
+                    VOLUNTEER RANKING
+                </h3>
+
+            </div>
+
+        </div>
+
+
+
+        <div id="loginLeaderboard">
+
+            <div class="no-ranking">
+                Loading volunteer ranking...
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script type="module">
+
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+import {
+    db
+}
+from "./firebase.js";
+
+
+import {
+    collection,
+    getDocs,
+    query,
+    where
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+
+const usernameInput =
+    document.getElementById(
+        "username"
+    );
+
+
+const passwordInput =
+    document.getElementById(
+        "password"
+    );
+
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+
+const errorMessage =
+    document.getElementById(
+        "errorMessage"
+    );
+
+
+
+/* =========================================================
+   SHOW / HIDE PASSWORD
+========================================================= */
+
+document
+    .getElementById(
+        "showPassword"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+
+            if (
+                passwordInput.type ===
+                "password"
+            ) {
+
+                passwordInput.type =
+                    "text";
+
+            } else {
+
+                passwordInput.type =
+                    "password";
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const username =
+            usernameInput
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            passwordInput.value;
+
+
+        errorMessage.innerText =
+            "";
+
+
+        loginButton.disabled =
+            true;
+
+
+        loginButton.innerText =
+            "PLEASE WAIT...";
+
+
+        try {
+
+
+            /* =====================================
+               ADMIN LOGIN
+            ====================================== */
+
+            if (
+                username === "admin"
+                &&
+                password === "admin@123"
+            ) {
+
+
+                localStorage.setItem(
+                    "adminLogin",
+                    "true"
+                );
+
+
+                localStorage.removeItem(
+                    "currentUser"
+                );
+
+
+                window.location.href =
+                    "admin.html";
+
+
+                return;
+
+            }
+
+
+
+            /* =====================================
+               FIRESTORE USER LOGIN
+            ====================================== */
+
+            const usersRef =
+                collection(
+                    db,
+                    "users"
+                );
+
+
+            const userQuery =
+                query(
+                    usersRef,
+
+                    where(
+                        "username",
+                        "==",
+                        username
+                    )
+                );
+
+
+            const snapshot =
+                await getDocs(
+                    userQuery
+                );
+
+
+            if (
+                snapshot.empty
+            ) {
+
+                showLoginError(
+                    "Wrong username or password."
+                );
+
+                return;
+
+            }
+
+
+
+            let matchedUser =
+                null;
+
+
+            let matchedId =
+                null;
+
+
+
+            snapshot.forEach(
+                documentSnapshot => {
+
+
+                    const data =
+                        documentSnapshot.data();
+
+
+                    if (
+                        data.password ===
+                        password
+                    ) {
+
+                        matchedUser =
+                            data;
+
+
+                        matchedId =
+                            documentSnapshot.id;
+
+                    }
+
+                }
+            );
+
+
+
+            if (!matchedUser) {
+
+                showLoginError(
+                    "Wrong username or password."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =====================================
+               ACCOUNT STATUS
+            ====================================== */
+
+            if (
+                matchedUser.active !==
+                true
+            ) {
+
+                showLoginError(
+                    "Your account is disabled. Contact Admin."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =====================================
+               VALID ROLE
+            ====================================== */
+
+            if (
+                matchedUser.role !==
+                "member"
+
+                &&
+
+                matchedUser.role !==
+                "volunteer"
+            ) {
+
+                showLoginError(
+                    "Invalid account role."
+                );
+
+                return;
+
+            }
+
+
+
+            /* =====================================
+               SAVE CURRENT SESSION
+            ====================================== */
+
+            const currentUser = {
+
+                id:
+                    matchedId,
+
+                name:
+                    matchedUser.name,
+
+                username:
+                    matchedUser.username,
+
+                mobile:
+                    matchedUser.mobile || "",
+
+                role:
+                    matchedUser.role
+
+            };
+
+
+            localStorage.setItem(
+                "currentUser",
+                JSON.stringify(
+                    currentUser
+                )
+            );
+
+
+            localStorage.removeItem(
+                "adminLogin"
+            );
+
+
+
+            /* =====================================
+               REDIRECT
+            ====================================== */
+
+            if (
+                matchedUser.role ===
+                "volunteer"
+            ) {
+
+                window.location.href =
+                    "volunteer.html";
+
+                return;
+
+            }
+
+
+            window.location.href =
+                "member.html";
+
+
+        }
+
+        catch (error) {
+
+
+            console.error(
+                "Login Error:",
+                error
+            );
+
+
+            showLoginError(
+                "Firebase connection error. Please check internet and Firestore setup."
+            );
+
+        }
+
+        finally {
+
+
+            loginButton.disabled =
+                false;
+
+
+            loginButton.innerText =
+                "LOGIN";
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   LOGIN ERROR
+========================================================= */
+
+function showLoginError(
+    message
+) {
+
+    errorMessage.innerText =
+        message;
+
+
+    loginButton.disabled =
+        false;
+
+
+    loginButton.innerText =
+        "LOGIN";
+
+}
+
+
+
+/* =========================================================
+   VOLUNTEER LEADERBOARD
+========================================================= */
+
+async function loadLeaderboard() {
+
+
+    const container =
+        document.getElementById(
+            "loginLeaderboard"
+        );
+
+
+    try {
+
+
+        /* =====================================
+           LOAD USERS
+        ====================================== */
+
+        const usersSnapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "users"
+                )
+            );
+
+
+        const volunteers =
+            [];
+
+
+        usersSnapshot.forEach(
+            documentSnapshot => {
+
+
+                const user =
+                    documentSnapshot.data();
+
+
+                if (
+                    user.role ===
+                    "volunteer"
+
+                    &&
+
+                    user.active ===
+                    true
+                ) {
+
+
+                    volunteers.push({
+
+                        id:
+                            documentSnapshot.id,
+
+                        name:
+                            user.name,
+
+                        username:
+                            user.username,
+
+                        completed:
+                            0,
+
+                        ratingTotal:
+                            0,
+
+                        rating:
+                            0,
+
+                        points:
+                            0
+
+                    });
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           LOAD TASKS
+        ====================================== */
+
+        const tasksSnapshot =
+            await getDocs(
+                collection(
+                    db,
+                    "tasks"
+                )
+            );
+
+
+
+        tasksSnapshot.forEach(
+            documentSnapshot => {
+
+
+                const task =
+                    documentSnapshot.data();
+
+
+                if (
+                    task.status !==
+                    "completed"
+                ) {
+
+                    return;
+
+                }
+
+
+                const volunteer =
+                    volunteers.find(
+                        item =>
+
+                            String(item.id)
+                            ===
+                            String(
+                                task.volunteerId
+                            )
+                    );
+
+
+                if (!volunteer) {
+
+                    return;
+
+                }
+
+
+                const rating =
+                    Number(
+                        task.rating
+                    ) || 0;
+
+
+                volunteer.completed++;
+
+
+                volunteer.ratingTotal +=
+                    rating;
+
+
+                /*
+                    Task complete = 10 points
+                    Rating = bonus points
+                */
+
+                volunteer.points +=
+                    10 + rating;
+
+            }
+        );
+
+
+
+        /* =====================================
+           AVERAGE RATING
+        ====================================== */
+
+        volunteers.forEach(
+            volunteer => {
+
+
+                if (
+                    volunteer.completed > 0
+                ) {
+
+                    volunteer.rating =
+
+                        volunteer.ratingTotal
+                        /
+                        volunteer.completed;
+
+                }
+
+            }
+        );
+
+
+
+        /* =====================================
+           SORT
+        ====================================== */
+
+        volunteers.sort(
+            (a, b) => {
+
+
+                if (
+                    b.points !==
+                    a.points
+                ) {
+
+                    return (
+                        b.points -
+                        a.points
+                    );
+
+                }
+
+
+                return (
+                    b.rating -
+                    a.rating
+                );
+
+            }
+        );
+
+
+
+        displayLeaderboard(
+            volunteers
+        );
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "Leaderboard Error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="no-ranking">
+
+                Volunteer ranking
+                is temporarily unavailable.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   DISPLAY LEADERBOARD
+========================================================= */
+
+function displayLeaderboard(
+    volunteers
+) {
+
+
+    const container =
+        document.getElementById(
+            "loginLeaderboard"
+        );
+
+
+    const ranking =
+        volunteers.filter(
+            volunteer =>
+
+                volunteer.completed > 0
+        );
+
+
+    if (
+        ranking.length === 0
+    ) {
+
+
+        container.innerHTML = `
+
+            <div class="no-ranking">
+
+                Volunteer rankings will appear
+                after tasks are completed and rated.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    container.innerHTML =
+        "";
+
+
+
+    ranking
+        .slice(
+            0,
+            5
+        )
+        .forEach(
+            (
+                volunteer,
+                index
+            ) => {
+
+
+                let medal =
+                    "#" +
+                    (index + 1);
+
+
+                if (
+                    index === 0
+                ) {
+
+                    medal =
+                        "🥇";
+
+                }
+
+
+                if (
+                    index === 1
+                ) {
+
+                    medal =
+                        "🥈";
+
+                }
+
+
+                if (
+                    index === 2
+                ) {
+
+                    medal =
+                        "🥉";
+
+                }
+
+
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "ranking-item";
+
+
+                item.innerHTML = `
+
+                    <div class="rank-number">
+
+                        ${medal}
+
+                    </div>
+
+
+                    <div class="rank-person">
+
+                        <strong>
+
+                            ${escapeHTML(
+                                volunteer.name
+                            )}
+
+                        </strong>
+
+
+                        <span>
+
+                            @${escapeHTML(
+                                volunteer.username
+                            )}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="rank-performance">
+
+                        <strong>
+
+                            ${volunteer.points}
+                            pts
+
+                        </strong>
+
+
+                        <span>
+
+                            ⭐
+                            ${volunteer.rating
+                                .toFixed(1)}
+
+                            •
+
+                            ${volunteer.completed}
+                            tasks
+
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+}
+
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadLeaderboard();
+
+</script>
+
+
+</body>
+</html>

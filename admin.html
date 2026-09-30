@@ -1,0 +1,1816 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Aakash Earth Festival</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .section-page { display:none; }
+        .section-page.active { display:block; }
+
+        .admin-table-wrap {
+            overflow-x:auto;
+            margin-top:18px;
+        }
+
+        .admin-table {
+            width:100%;
+            border-collapse:collapse;
+            min-width:850px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding:12px;
+            border-bottom:1px solid #ead9b4;
+            text-align:left;
+            font-size:12px;
+        }
+
+        .admin-table th {
+            color:#6b0713;
+            background:#fff8e8;
+        }
+
+        .small-btn {
+            padding:7px 10px;
+            margin:2px;
+            border:0;
+            border-radius:6px;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        .gold-btn {
+            background:#b88727;
+            color:white;
+        }
+
+        .red-btn {
+            background:#8c1723;
+            color:white;
+        }
+
+        .green-btn {
+            background:#287a45;
+            color:white;
+        }
+
+        .status-pill {
+            display:inline-block;
+            padding:5px 9px;
+            border-radius:20px;
+            font-size:10px;
+            font-weight:bold;
+            text-transform:uppercase;
+        }
+
+        .status-pending { background:#fff1c9; color:#8a5d00; }
+        .status-submitted { background:#dbeeff; color:#14528b; }
+        .status-completed { background:#dff3e5; color:#24633a; }
+
+        .review-modal {
+            display:none;
+            position:fixed;
+            inset:0;
+            z-index:9999;
+            background:rgba(30,0,5,.75);
+            padding:20px;
+            overflow:auto;
+        }
+
+        .review-modal.show {
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .review-card {
+            width:100%;
+            max-width:650px;
+            max-height:92vh;
+            overflow:auto;
+            background:#fffaf0;
+            border:2px solid #bd9139;
+            border-radius:14px;
+            padding:25px;
+        }
+
+        .review-card h2 {
+            color:#5b0712;
+        }
+
+        .review-proof {
+            width:100%;
+            max-height:330px;
+            object-fit:contain;
+            background:#eee;
+            border-radius:10px;
+            margin:15px 0;
+        }
+
+        .review-info {
+            padding:12px;
+            background:#fff3d6;
+            border-radius:8px;
+            margin:10px 0;
+        }
+
+        .review-actions {
+            display:flex;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .review-actions button {
+            flex:1;
+        }
+
+        .receipt-total {
+            font-size:22px;
+            font-weight:bold;
+            color:#6b0713;
+        }
+
+        @media(max-width:700px) {
+            .review-actions {
+                flex-direction:column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div>
+        <h1>AAKASH EARTH FESTIVAL</h1>
+        <p>ADMIN CONTROL PANEL</p>
+    </div>
+
+    <button onclick="logout()" class="logout-btn">
+        LOGOUT
+    </button>
+</header>
+
+
+<div class="admin-layout">
+
+    <aside class="sidebar">
+        <button onclick="openSection('dashboard')">Dashboard</button>
+        <button onclick="openUserForm('member')">+ Add Member</button>
+        <button onclick="openUserForm('volunteer')">+ Add Volunteer</button>
+        <button onclick="openSection('users')">Manage Users</button>
+        <button onclick="openSection('assignTask')">+ Assign Task</button>
+        <button onclick="openSection('tasks')">All Tasks</button>
+        <button onclick="openSection('receipts')">Receipts</button>
+        <button onclick="openSection('collection')">Collection</button>
+    </aside>
+
+
+    <main class="admin-content">
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="section-page active">
+
+            <div class="royal-banner">
+                <p>|| श्री गणेशाय नमः ||</p>
+                <h2>Welcome, Administrator</h2>
+                <span>AAKASH EARTH FESTIVAL</span>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <span>Total Collection</span>
+                    <strong id="dashCollection">₹0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Total Receipts</span>
+                    <strong id="dashReceipts">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Members</span>
+                    <strong id="dashMembers">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Volunteers</span>
+                    <strong id="dashVolunteers">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="admin-card">
+                <h3>Task Overview</h3>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span>Pending</span>
+                        <strong id="dashPending">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Submitted</span>
+                        <strong id="dashSubmitted">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Completed</span>
+                        <strong id="dashCompleted">0</strong>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ADD USER -->
+
+        <section id="addUser" class="section-page">
+
+            <div class="admin-card">
+
+                <p class="mini-title">ACCOUNT MANAGEMENT</p>
+
+                <h2 id="userFormTitle">
+                    Add Member
+                </h2>
+
+                <form id="userForm">
+
+                    <input type="hidden" id="newRole" value="member">
+
+                    <div class="form-grid">
+
+                        <div>
+                            <label>Full Name *</label>
+                            <input type="text" id="newName" required>
+                        </div>
+
+                        <div>
+                            <label>Mobile Number *</label>
+                            <input
+                                type="tel"
+                                id="newMobile"
+                                maxlength="10"
+                                inputmode="numeric"
+                                required
+                            >
+                        </div>
+
+                        <div>
+                            <label>Username *</label>
+                            <input
+                                type="text"
+                                id="newUsername"
+                                autocomplete="off"
+                                required
+                            >
+                        </div>
+
+                        <div>
+                            <label>Password *</label>
+                            <input
+                                type="password"
+                                id="newPassword"
+                                minlength="4"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="primary-btn" id="saveUserBtn">
+                        CREATE ACCOUNT
+                    </button>
+
+                    <p id="userMessage"></p>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- MANAGE USERS -->
+
+        <section id="users" class="section-page">
+
+            <div class="admin-card">
+
+                <h2>Manage Members & Volunteers</h2>
+
+                <input
+                    type="text"
+                    id="userSearch"
+                    placeholder="Search name or username..."
+                    oninput="displayUsers()"
+                >
+
+                <div class="admin-table-wrap">
+
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Mobile</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="usersTable"></tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ASSIGN TASK -->
+
+        <section id="assignTask" class="section-page">
+
+            <div class="admin-card">
+
+                <p class="mini-title">VOLUNTEER MANAGEMENT</p>
+
+                <h2>Assign New Task</h2>
+
+                <form id="taskForm">
+
+                    <div class="form-grid">
+
+                        <div>
+                            <label>Volunteer *</label>
+                            <select id="taskVolunteer" required>
+                                <option value="">Select Volunteer</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Due Date *</label>
+                            <input type="date" id="taskDueDate" required>
+                        </div>
+
+                        <div>
+                            <label>Priority</label>
+                            <select id="taskPriority">
+                                <option value="normal">Normal</option>
+                                <option value="important">Important</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Task Title *</label>
+                            <input type="text" id="taskTitle" required>
+                        </div>
+
+                        <div class="full-width">
+                            <label>Description *</label>
+                            <textarea id="taskDescription" rows="5" required></textarea>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="primary-btn" id="assignTaskBtn">
+                        ASSIGN TASK
+                    </button>
+
+                    <p id="taskMessage"></p>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ALL TASKS -->
+
+        <section id="tasks" class="section-page">
+
+            <div class="admin-card">
+
+                <h2>All Volunteer Tasks</h2>
+
+                <div class="form-grid">
+
+                    <select id="taskFilter" onchange="displayTasks()">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="submitted">Submitted</option>
+                        <option value="completed">Completed</option>
+                    </select>
+
+                    <input
+                        type="text"
+                        id="taskSearch"
+                        placeholder="Search volunteer or task..."
+                        oninput="displayTasks()"
+                    >
+
+                </div>
+
+                <div class="admin-table-wrap">
+
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th>Volunteer</th>
+                            <th>Task</th>
+                            <th>Due</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Rating</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="tasksTable"></tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECEIPTS -->
+
+        <section id="receipts" class="section-page">
+
+            <div class="admin-card">
+
+                <h2>All Receipts</h2>
+
+                <p>
+                    Total Collection:
+                    <span class="receipt-total" id="receiptCollection">
+                        ₹0
+                    </span>
+                </p>
+
+                <input
+                    type="text"
+                    id="receiptSearch"
+                    placeholder="Search receipt no, donor or mobile..."
+                    oninput="displayReceipts()"
+                >
+
+                <div class="admin-table-wrap">
+
+                    <table class="admin-table">
+                        <thead>
+                        <tr>
+                            <th>Receipt No.</th>
+                            <th>Donor</th>
+                            <th>Mobile</th>
+                            <th>Amount</th>
+                            <th>Payment</th>
+                            <th>Received By</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="receiptsTable"></tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- COLLECTION -->
+
+        <section id="collection" class="section-page">
+
+            <div class="admin-card">
+
+                <p class="mini-title">FESTIVAL COLLECTION</p>
+
+                <h2>Total Vargani Collection</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <span>Total</span>
+                        <strong id="collectionTotal">₹0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Cash</span>
+                        <strong id="cashTotal">₹0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>UPI</span>
+                        <strong id="upiTotal">₹0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Other</span>
+                        <strong id="otherTotal">₹0</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+
+<!-- TASK REVIEW MODAL -->
+
+<div id="reviewModal" class="review-modal">
+
+    <div class="review-card">
+
+        <h2>Review Volunteer Task</h2>
+
+        <div class="review-info">
+            <strong id="reviewTaskTitle">-</strong>
+            <p>
+                Volunteer:
+                <span id="reviewVolunteer">-</span>
+            </p>
+        </div>
+
+        <div class="review-info">
+            <strong>Volunteer Note</strong>
+            <p id="reviewNote">-</p>
+        </div>
+
+        <img
+            id="reviewPhoto"
+            class="review-proof"
+            alt="Task proof"
+        >
+
+        <div class="form-grid">
+
+            <div>
+                <label>Admin Rating *</label>
+
+                <select id="adminRating">
+                    <option value="">Select Rating</option>
+                    <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                    <option value="4">⭐⭐⭐⭐ Very Good</option>
+                    <option value="3">⭐⭐⭐ Good</option>
+                    <option value="2">⭐⭐ Average</option>
+                    <option value="1">⭐ Needs Improvement</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Admin Remark</label>
+
+                <textarea
+                    id="adminRemark"
+                    rows="4"
+                    placeholder="Write remark..."
+                ></textarea>
+            </div>
+
+        </div>
+
+        <div class="review-actions">
+
+            <button
+                class="small-btn red-btn"
+                onclick="closeReview()"
+            >
+                CLOSE
+            </button>
+
+            <button
+                class="small-btn green-btn"
+                id="approveTaskButton"
+                onclick="approveTask()"
+            >
+                APPROVE & COMPLETE
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script type="module">
+
+import { db } from "./firebase.js";
+
+import {
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    updateDoc,
+    deleteDoc,
+    query,
+    where,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+/* ACCESS */
+
+if (
+    localStorage.getItem("adminLogin")
+    !== "true"
+) {
+    window.location.href = "index.html";
+}
+
+
+/* DATA */
+
+let users = [];
+let tasks = [];
+let receipts = [];
+let selectedReviewTaskId = null;
+
+
+/* NAVIGATION */
+
+window.openSection = function(sectionId) {
+
+    document
+        .querySelectorAll(".section-page")
+        .forEach(section => {
+            section.classList.remove("active");
+        });
+
+    const section =
+        document.getElementById(sectionId);
+
+    if (section) {
+        section.classList.add("active");
+    }
+
+    if (sectionId === "users") {
+        loadUsers();
+    }
+
+    if (sectionId === "tasks") {
+        loadTasks();
+    }
+
+    if (
+        sectionId === "receipts" ||
+        sectionId === "collection"
+    ) {
+        loadReceipts();
+    }
+};
+
+
+window.openUserForm = function(role) {
+
+    openSection("addUser");
+
+    document.getElementById("newRole").value =
+        role;
+
+    document.getElementById("userFormTitle").innerText =
+        role === "volunteer"
+            ? "Add Volunteer"
+            : "Add Member";
+
+    document.getElementById("userForm").reset();
+
+    document.getElementById("newRole").value =
+        role;
+
+    document.getElementById("userMessage").innerText =
+        "";
+};
+
+
+/* LOAD USERS */
+
+async function loadUsers() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "users")
+            );
+
+        users = [];
+
+        snapshot.forEach(item => {
+
+            users.push({
+                id: item.id,
+                ...item.data()
+            });
+
+        });
+
+        displayUsers();
+        loadVolunteerDropdown();
+        updateDashboard();
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+}
+
+
+/* ADD USER */
+
+document
+    .getElementById("userForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const button =
+                document.getElementById("saveUserBtn");
+
+            const message =
+                document.getElementById("userMessage");
+
+            const name =
+                document.getElementById("newName")
+                    .value.trim();
+
+            const mobile =
+                document.getElementById("newMobile")
+                    .value.trim();
+
+            const username =
+                document.getElementById("newUsername")
+                    .value.trim()
+                    .toLowerCase();
+
+            const password =
+                document.getElementById("newPassword")
+                    .value;
+
+            const role =
+                document.getElementById("newRole")
+                    .value;
+
+            if (!/^[0-9]{10}$/.test(mobile)) {
+
+                message.innerText =
+                    "Enter valid 10 digit mobile number.";
+
+                return;
+            }
+
+            if (username === "admin") {
+
+                message.innerText =
+                    "Username 'admin' is reserved.";
+
+                return;
+            }
+
+            button.disabled = true;
+            button.innerText = "SAVING...";
+
+            try {
+
+                const duplicateQuery =
+                    query(
+                        collection(db, "users"),
+                        where("username", "==", username)
+                    );
+
+                const duplicateSnapshot =
+                    await getDocs(duplicateQuery);
+
+                if (!duplicateSnapshot.empty) {
+
+                    message.innerText =
+                        "Username already exists.";
+
+                    return;
+                }
+
+                await addDoc(
+                    collection(db, "users"),
+                    {
+                        name,
+                        mobile,
+                        username,
+                        password,
+                        role,
+                        active: true,
+                        createdAt: serverTimestamp()
+                    }
+                );
+
+                message.innerText =
+                    role === "volunteer"
+                        ? "Volunteer created successfully ✓"
+                        : "Member created successfully ✓";
+
+                document
+                    .getElementById("userForm")
+                    .reset();
+
+                document
+                    .getElementById("newRole")
+                    .value = role;
+
+                await loadUsers();
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.innerText =
+                    "Unable to create account.";
+
+            } finally {
+
+                button.disabled = false;
+                button.innerText = "CREATE ACCOUNT";
+            }
+        }
+    );
+
+
+/* DISPLAY USERS */
+
+window.displayUsers = function() {
+
+    const table =
+        document.getElementById("usersTable");
+
+    const search =
+        document.getElementById("userSearch")
+            .value.trim()
+            .toLowerCase();
+
+    table.innerHTML = "";
+
+    const filtered =
+        users.filter(user => {
+
+            return (
+                String(user.name || "")
+                    .toLowerCase()
+                    .includes(search)
+                ||
+                String(user.username || "")
+                    .toLowerCase()
+                    .includes(search)
+            );
+
+        });
+
+    if (!filtered.length) {
+
+        table.innerHTML =
+            `<tr><td colspan="6">No users found.</td></tr>`;
+
+        return;
+    }
+
+    filtered.forEach(user => {
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${escapeHTML(user.name)}</td>
+
+            <td>
+                @${escapeHTML(user.username)}
+            </td>
+
+            <td>
+                ${escapeHTML(user.mobile || "-")}
+            </td>
+
+            <td>
+                ${escapeHTML(user.role)}
+            </td>
+
+            <td>
+                ${user.active === true ? "Active" : "Disabled"}
+            </td>
+
+            <td>
+                <button
+                    class="small-btn gold-btn"
+                    onclick="toggleUser('${user.id}', ${user.active === true})"
+                >
+                    ${user.active === true ? "Disable" : "Enable"}
+                </button>
+
+                <button
+                    class="small-btn red-btn"
+                    onclick="removeUser('${user.id}')"
+                >
+                    Delete
+                </button>
+            </td>
+        `;
+
+        table.appendChild(row);
+    });
+};
+
+
+/* USER STATUS */
+
+window.toggleUser =
+async function(id, currentlyActive) {
+
+    try {
+
+        await updateDoc(
+            doc(db, "users", id),
+            {
+                active: !currentlyActive
+            }
+        );
+
+        await loadUsers();
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Unable to update user.");
+    }
+};
+
+
+/* DELETE USER */
+
+window.removeUser =
+async function(id) {
+
+    if (
+        !confirm(
+            "Delete this user account?"
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        await deleteDoc(
+            doc(db, "users", id)
+        );
+
+        await loadUsers();
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Unable to delete user.");
+    }
+};
+
+
+/* VOLUNTEER DROPDOWN */
+
+function loadVolunteerDropdown() {
+
+    const select =
+        document.getElementById("taskVolunteer");
+
+    select.innerHTML =
+        `<option value="">Select Volunteer</option>`;
+
+    users
+        .filter(user =>
+            user.role === "volunteer"
+            &&
+            user.active === true
+        )
+        .forEach(user => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = user.id;
+
+            option.textContent =
+                `${user.name} (@${user.username})`;
+
+            select.appendChild(option);
+        });
+}
+
+
+/* ASSIGN TASK */
+
+document
+    .getElementById("taskForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const volunteerId =
+                document.getElementById("taskVolunteer").value;
+
+            const title =
+                document.getElementById("taskTitle")
+                    .value.trim();
+
+            const description =
+                document.getElementById("taskDescription")
+                    .value.trim();
+
+            const dueDate =
+                document.getElementById("taskDueDate").value;
+
+            const priority =
+                document.getElementById("taskPriority").value;
+
+            const volunteer =
+                users.find(
+                    user => user.id === volunteerId
+                );
+
+            if (!volunteer) {
+
+                alert("Select a valid volunteer.");
+                return;
+            }
+
+            const button =
+                document.getElementById("assignTaskBtn");
+
+            button.disabled = true;
+            button.innerText = "ASSIGNING...";
+
+            try {
+
+                await addDoc(
+                    collection(db, "tasks"),
+                    {
+                        volunteerId,
+                        volunteerName: volunteer.name,
+                        volunteerUsername: volunteer.username,
+
+                        title,
+                        description,
+                        dueDate,
+                        priority,
+
+                        status: "pending",
+
+                        assignedDate: serverTimestamp(),
+
+                        submittedDate: null,
+                        completedDate: null,
+
+                        volunteerNote: "",
+                        proofPhoto: "",
+
+                        rating: 0,
+                        adminRemark: ""
+                    }
+                );
+
+                document
+                    .getElementById("taskForm")
+                    .reset();
+
+                document
+                    .getElementById("taskMessage")
+                    .innerText =
+                    "Task assigned successfully ✓";
+
+                await loadTasks();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to assign task."
+                );
+
+            } finally {
+
+                button.disabled = false;
+                button.innerText = "ASSIGN TASK";
+            }
+        }
+    );
+
+
+/* LOAD TASKS */
+
+async function loadTasks() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "tasks")
+            );
+
+        tasks = [];
+
+        snapshot.forEach(item => {
+
+            tasks.push({
+                id: item.id,
+                ...item.data()
+            });
+
+        });
+
+        displayTasks();
+        updateDashboard();
+
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
+
+/* DISPLAY TASKS */
+
+window.displayTasks = function() {
+
+    const table =
+        document.getElementById("tasksTable");
+
+    const filter =
+        document.getElementById("taskFilter").value;
+
+    const search =
+        document.getElementById("taskSearch")
+            .value.trim()
+            .toLowerCase();
+
+    table.innerHTML = "";
+
+    const filtered =
+        tasks.filter(task => {
+
+            const statusMatch =
+                filter === "all"
+                ||
+                task.status === filter;
+
+            const searchMatch =
+                String(task.title || "")
+                    .toLowerCase()
+                    .includes(search)
+                ||
+                String(task.volunteerName || "")
+                    .toLowerCase()
+                    .includes(search);
+
+            return statusMatch && searchMatch;
+        });
+
+    if (!filtered.length) {
+
+        table.innerHTML =
+            `<tr><td colspan="7">No tasks found.</td></tr>`;
+
+        return;
+    }
+
+    filtered.forEach(task => {
+
+        const statusClass =
+            task.status === "completed"
+                ? "status-completed"
+                : task.status === "submitted"
+                    ? "status-submitted"
+                    : "status-pending";
+
+        let actions = "";
+
+        if (task.status === "submitted") {
+
+            actions += `
+                <button
+                    class="small-btn green-btn"
+                    onclick="reviewTask('${task.id}')"
+                >
+                    Review
+                </button>
+            `;
+        }
+
+        actions += `
+            <button
+                class="small-btn red-btn"
+                onclick="deleteTask('${task.id}')"
+            >
+                Delete
+            </button>
+        `;
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+            <td>
+                ${escapeHTML(task.volunteerName || "-")}
+            </td>
+
+            <td>
+                ${escapeHTML(task.title || "-")}
+            </td>
+
+            <td>
+                ${escapeHTML(task.dueDate || "-")}
+            </td>
+
+            <td>
+                ${escapeHTML(task.priority || "normal")}
+            </td>
+
+            <td>
+                <span class="status-pill ${statusClass}">
+                    ${escapeHTML(task.status || "pending")}
+                </span>
+            </td>
+
+            <td>
+                ${
+                    Number(task.rating) > 0
+                    ? "⭐ " + Number(task.rating)
+                    : "-"
+                }
+            </td>
+
+            <td>
+                ${actions}
+            </td>
+        `;
+
+        table.appendChild(row);
+    });
+};
+
+
+/* DELETE TASK */
+
+window.deleteTask =
+async function(id) {
+
+    if (
+        !confirm(
+            "Delete this task?"
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        await deleteDoc(
+            doc(db, "tasks", id)
+        );
+
+        await loadTasks();
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Unable to delete task.");
+    }
+};
+
+
+/* REVIEW TASK */
+
+window.reviewTask =
+function(id) {
+
+    const task =
+        tasks.find(
+            item => item.id === id
+        );
+
+    if (!task) {
+        return;
+    }
+
+    selectedReviewTaskId = id;
+
+    document
+        .getElementById("reviewTaskTitle")
+        .innerText =
+        task.title || "-";
+
+    document
+        .getElementById("reviewVolunteer")
+        .innerText =
+        task.volunteerName || "-";
+
+    document
+        .getElementById("reviewNote")
+        .innerText =
+        task.volunteerNote || "No note submitted.";
+
+    document
+        .getElementById("adminRating")
+        .value =
+        task.rating || "";
+
+    document
+        .getElementById("adminRemark")
+        .value =
+        task.adminRemark || "";
+
+    const image =
+        document.getElementById("reviewPhoto");
+
+    if (task.proofPhoto) {
+
+        image.src =
+            task.proofPhoto;
+
+        image.style.display =
+            "block";
+
+    } else {
+
+        image.removeAttribute("src");
+
+        image.style.display =
+            "none";
+    }
+
+    document
+        .getElementById("reviewModal")
+        .classList.add("show");
+};
+
+
+window.closeReview =
+function() {
+
+    selectedReviewTaskId = null;
+
+    document
+        .getElementById("reviewModal")
+        .classList.remove("show");
+};
+
+
+/* APPROVE TASK */
+
+window.approveTask =
+async function() {
+
+    if (!selectedReviewTaskId) {
+        return;
+    }
+
+    const rating =
+        Number(
+            document.getElementById("adminRating").value
+        );
+
+    const remark =
+        document.getElementById("adminRemark")
+            .value.trim();
+
+    if (
+        rating < 1 ||
+        rating > 5
+    ) {
+
+        alert(
+            "Please select rating from 1 to 5."
+        );
+
+        return;
+    }
+
+    const button =
+        document.getElementById("approveTaskButton");
+
+    button.disabled = true;
+    button.innerText = "APPROVING...";
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                "tasks",
+                selectedReviewTaskId
+            ),
+            {
+                status: "completed",
+                rating,
+                adminRemark: remark,
+                completedDate: serverTimestamp()
+            }
+        );
+
+        closeReview();
+
+        await loadTasks();
+
+        alert(
+            "Task approved successfully.\n\nVolunteer rating and ranking updated."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to approve task."
+        );
+
+    } finally {
+
+        button.disabled = false;
+        button.innerText = "APPROVE & COMPLETE";
+    }
+};
+
+
+/* LOAD RECEIPTS */
+
+async function loadReceipts() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "receipts")
+            );
+
+        receipts = [];
+
+        snapshot.forEach(item => {
+
+            receipts.push({
+                id: item.id,
+                ...item.data()
+            });
+
+        });
+
+        displayReceipts();
+        updateCollection();
+        updateDashboard();
+
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
+
+/* DISPLAY RECEIPTS */
+
+window.displayReceipts =
+function() {
+
+    const table =
+        document.getElementById("receiptsTable");
+
+    const search =
+        document.getElementById("receiptSearch")
+            .value.trim()
+            .toLowerCase();
+
+    table.innerHTML = "";
+
+    const filtered =
+        receipts.filter(receipt => {
+
+            return (
+                String(receipt.receiptNo || "")
+                    .toLowerCase()
+                    .includes(search)
+                ||
+                String(receipt.donorName || "")
+                    .toLowerCase()
+                    .includes(search)
+                ||
+                String(receipt.donorMobile || "")
+                    .includes(search)
+            );
+
+        });
+
+    if (!filtered.length) {
+
+        table.innerHTML =
+            `<tr><td colspan="8">No receipts found.</td></tr>`;
+
+        return;
+    }
+
+    filtered.forEach(receipt => {
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+            <td>
+                ${escapeHTML(receipt.receiptNo || "-")}
+            </td>
+
+            <td>
+                ${escapeHTML(receipt.donorName || "-")}
+            </td>
+
+            <td>
+                ${escapeHTML(receipt.donorMobile || "-")}
+            </td>
+
+            <td>
+                ₹${formatMoney(receipt.amount)}
+            </td>
+
+            <td>
+                ${escapeHTML(receipt.paymentMode || "-")}
+            </td>
+
+            <td>
+                ${escapeHTML(receipt.createdByName || "-")}
+                <br>
+                <small>
+                    ${escapeHTML(receipt.createdByRole || "")}
+                </small>
+            </td>
+
+            <td>
+                ${escapeHTML(receipt.receiptDate || "-")}
+            </td>
+
+            <td>
+                <button
+                    class="small-btn red-btn"
+                    onclick="deleteReceipt('${receipt.id}')"
+                >
+                    Delete
+                </button>
+            </td>
+        `;
+
+        table.appendChild(row);
+    });
+};
+
+
+/* DELETE RECEIPT */
+
+window.deleteReceipt =
+async function(id) {
+
+    if (
+        !confirm(
+            "Delete this receipt permanently?"
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        await deleteDoc(
+            doc(db, "receipts", id)
+        );
+
+        await loadReceipts();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to delete receipt."
+        );
+    }
+};
+
+
+/* COLLECTION */
+
+function updateCollection() {
+
+    let total = 0;
+    let cash = 0;
+    let upi = 0;
+    let other = 0;
+
+    receipts.forEach(receipt => {
+
+        const amount =
+            Number(receipt.amount) || 0;
+
+        total += amount;
+
+        const mode =
+            String(
+                receipt.paymentMode || ""
+            ).toLowerCase();
+
+        if (mode === "cash") {
+
+            cash += amount;
+
+        } else if (mode === "upi") {
+
+            upi += amount;
+
+        } else {
+
+            other += amount;
+        }
+    });
+
+    document
+        .getElementById("receiptCollection")
+        .innerText =
+        "₹" + formatMoney(total);
+
+    document
+        .getElementById("collectionTotal")
+        .innerText =
+        "₹" + formatMoney(total);
+
+    document
+        .getElementById("cashTotal")
+        .innerText =
+        "₹" + formatMoney(cash);
+
+    document
+        .getElementById("upiTotal")
+        .innerText =
+        "₹" + formatMoney(upi);
+
+    document
+        .getElementById("otherTotal")
+        .innerText =
+        "₹" + formatMoney(other);
+}
+
+
+/* DASHBOARD */
+
+function updateDashboard() {
+
+    const members =
+        users.filter(
+            user =>
+                user.role === "member"
+        ).length;
+
+    const volunteers =
+        users.filter(
+            user =>
+                user.role === "volunteer"
+        ).length;
+
+    const pending =
+        tasks.filter(
+            task =>
+                task.status === "pending"
+        ).length;
+
+    const submitted =
+        tasks.filter(
+            task =>
+                task.status === "submitted"
+        ).length;
+
+    const completed =
+        tasks.filter(
+            task =>
+                task.status === "completed"
+        ).length;
+
+    const totalCollection =
+        receipts.reduce(
+            (sum, receipt) =>
+                sum +
+                (Number(receipt.amount) || 0),
+            0
+        );
+
+    document.getElementById("dashMembers").innerText =
+        members;
+
+    document.getElementById("dashVolunteers").innerText =
+        volunteers;
+
+    document.getElementById("dashPending").innerText =
+        pending;
+
+    document.getElementById("dashSubmitted").innerText =
+        submitted;
+
+    document.getElementById("dashCompleted").innerText =
+        completed;
+
+    document.getElementById("dashReceipts").innerText =
+        receipts.length;
+
+    document.getElementById("dashCollection").innerText =
+        "₹" + formatMoney(totalCollection);
+}
+
+
+/* MONEY */
+
+function formatMoney(value) {
+
+    return (
+        Number(value) || 0
+    ).toLocaleString("en-IN");
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* LOGOUT */
+
+window.logout =
+function() {
+
+    localStorage.removeItem(
+        "adminLogin"
+    );
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    window.location.href =
+        "index.html";
+};
+
+
+/* START */
+
+async function startAdmin() {
+
+    await Promise.all([
+        loadUsers(),
+        loadTasks(),
+        loadReceipts()
+    ]);
+
+    updateDashboard();
+}
+
+
+startAdmin();
+
+</script>
+
+</body>
+</html>
